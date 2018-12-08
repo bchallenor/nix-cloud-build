@@ -1,7 +1,7 @@
 { bash, coreutils, runCommand }:
 
 runCommand "basefs" {} ''
-  mkdir -p $out/bin $out/usr/bin $out/etc
+  mkdir -p $out/bin $out/usr/bin $out/etc $out/etc/nix
 
   ln -s ${bash}/bin/bash $out/bin/sh
 
@@ -18,5 +18,10 @@ runCommand "basefs" {} ''
   cat >$out/etc/group <<EOF
   root:!:0:
   nixbld:!:30000:nixbld1,nixbld2,nixbld3,nixbld4
+  EOF
+
+  cat >$out/etc/nix/nix.conf <<EOF
+  build-users-group = nixbld
+  sandbox = false
   EOF
 ''
