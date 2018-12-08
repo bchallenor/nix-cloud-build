@@ -17,12 +17,13 @@ let
 
     nix-build "$drv"
 
-    if [ ! -f result ]; then
+    result="$(find -L result -type f)"
+    if [ ! -f "$result" ]; then
       echo >/dev/stderr "Result is not a file"
       exit 1
     fi
 
-    aws s3 cp result "s3://$RESULT_BUCKET_NAME/$RESULT_OBJECT_KEY"
+    aws s3 cp "$result" "s3://$RESULT_BUCKET_NAME/$RESULT_OBJECT_KEY"
   '';
 
   image = dockerTools.buildLayeredImage {
@@ -32,6 +33,7 @@ let
       awscli
       basefs
       coreutils
+      findutils
       nix
     ];
     config = {
