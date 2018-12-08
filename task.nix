@@ -1,6 +1,8 @@
 with (import <nixpkgs> {});
 
 let
+  basefs = callPackage ./basefs.nix {};
+
   cmd = writeScript "cmd" ''
     #!${bash}/bin/bash
     set -eux -o pipefail
@@ -9,9 +11,9 @@ let
 
     aws s3 cp "s3://$DRV_BUCKET_NAME/$DRV_OBJECT_KEY" drv.closure
 
-    drv="$(nix-store --import --option build-users-group "" <drv.closure | tail -n1)"
+    drv="$(nix-store --import <drv.closure | tail -n1)"
 
-    nix-build --option build-users-group "" "$drv"
+    nix-build "$drv"
 
     if [ ! -f result ]; then
       echo >/dev/stderr "Result is not a file"
@@ -26,6 +28,7 @@ let
     maxLayers = 120;
     contents = [
       awscli
+      basefs
       coreutils
       nix
     ];
