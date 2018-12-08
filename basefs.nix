@@ -9,19 +9,14 @@ runCommand "basefs" {} ''
 
   cat >$out/etc/passwd <<EOF
   root:!:0:0::/root:${coreutils}/bin/false
-  nixbld1:!:30001:30000::/var/empty:${coreutils}/bin/false
-  nixbld2:!:30002:30000::/var/empty:${coreutils}/bin/false
-  nixbld3:!:30003:30000::/var/empty:${coreutils}/bin/false
-  nixbld4:!:30004:30000::/var/empty:${coreutils}/bin/false
   EOF
 
   cat >$out/etc/group <<EOF
   root:!:0:
-  nixbld:!:30000:nixbld1,nixbld2,nixbld3,nixbld4
   EOF
 
   cat >$out/etc/nix/nix.conf <<EOF
-  build-users-group = nixbld
+  build-users-group =
   sandbox = false
   EOF
 ''
