@@ -7,6 +7,8 @@ let
     #!${bash}/bin/bash
     set -eux -o pipefail
 
+    nix show-config
+
     mkdir -m 1777 /tmp
 
     aws s3 cp "s3://$DRV_BUCKET_NAME/$DRV_OBJECT_KEY" drv.closure
