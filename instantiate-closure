@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -eu -o pipefail
+
+drv=$(nix-instantiate "$@")
+drv_closure="$(basename "$drv").closure"
+nix-store --export $(nix-store -qR "$drv")> "$drv_closure"
+
+echo "$drv_closure"
